@@ -506,12 +506,14 @@ function updateTimer() {
     const seconds = totalSeconds % 60;
 
     if (hours > 0) {
-    timer.textContent =
-        pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
-} else {
-    timer.textContent =
-        pad(minutes) + ":" + pad(seconds);
+        timer.textContent =
+            pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+    } else {
+        timer.textContent =
+            pad(minutes) + ":" + pad(seconds);
+    }
 }
+
 function updateQR() {
     const data = [
         "PROTOTYPE_TICKET",
