@@ -197,7 +197,8 @@ body {
     justify-content: center;
 }
 
-.qr-wrapper img {
+.qr-wrapper img,
+.qr-wrapper canvas {
     display: block;
     width: 360px;
     height: 360px;
@@ -256,12 +257,14 @@ body {
         max-width: 100%;
     }
 
-    .qr-wrapper img {
+    .qr-wrapper img,
+    .qr-wrapper canvas {
         max-width: 100%;
         max-height: 100%;
     }
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -344,7 +347,7 @@ body {
         </div>
 
         <div class="qr-wrapper">
-            <img id="qrImage" src="" alt="QR-код">
+            <div id="qrImage" aria-label="QR-код"></div>
         </div>
 
         <div class="info">
@@ -381,6 +384,7 @@ const timer = document.getElementById("timer");
 const series = document.getElementById("series");
 const number = document.getElementById("number");
 const qr = document.getElementById("qrImage");
+let qrCodeInstance = null;
 const downloadButton = document.getElementById("downloadButton");
 
 function pad(n) {
@@ -388,6 +392,8 @@ function pad(n) {
 }
 
 let paymentDate;
+let timerStateActual = null;
+let timerDisplaySeconds = 0;
 
 const savedPayment = localStorage.getItem(KEY.payment);
 
@@ -395,6 +401,7 @@ if (savedPayment && !isNaN(Number(savedPayment))) {
     paymentDate = new Date(Number(savedPayment));
 } else {
     paymentDate = new Date();
+    timerStateActual = null;
     paymentDate.setSeconds(0, 0);
 
     localStorage.setItem(
@@ -499,18 +506,55 @@ function updateTimer() {
         now.getTime() - paymentDate.getTime()
     );
 
-    const totalSeconds = Math.floor(diff / 1000);
+    const actualSeconds = Math.floor(diff / 1000);
 
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
+    if (timerStateActual === null) {
+        timerStateActual = actualSeconds;
+
+        // Новый билет начинается с 00:00.
+        // Если время уже прошло до открытия страницы,
+        // воспроизводим переходы минут ниже.
+        timerDisplaySeconds = 0;
+
+        if (actualSeconds > 0) {
+            for (let i = 0; i < actualSeconds; i++) {
+                timerDisplaySeconds++;
+                if (timerDisplaySeconds % 60 === 0) {
+                    timerDisplaySeconds += Math.floor(Math.random() * 46);
+                }
+            }
+        }
+    }
+
+    const delta = actualSeconds - timerStateActual;
+
+    if (delta > 0) {
+        for (let i = 0; i < delta; i++) {
+            timerDisplaySeconds++;
+
+            // При переходе на новую минуту вместо 00 секунд
+            // ставим случайное значение от 00 до 45.
+            if (timerDisplaySeconds % 60 === 0) {
+                timerDisplaySeconds += Math.floor(Math.random() * 46);
+            }
+        }
+
+        timerStateActual = actualSeconds;
+    }
+
+    const hours = Math.floor(timerDisplaySeconds / 3600);
+    const minutes = Math.floor((timerDisplaySeconds % 3600) / 60);
+    const seconds = timerDisplaySeconds % 60;
 
     if (hours > 0) {
         timer.textContent =
-            pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+            pad(hours) + ":" +
+            pad(minutes) + ":" +
+            pad(seconds);
     } else {
         timer.textContent =
-            pad(minutes) + ":" + pad(seconds);
+            pad(minutes) + ":" +
+            pad(seconds);
     }
 }
 
@@ -525,12 +569,21 @@ function updateQR() {
         "VEHICLE=" + vehicle.textContent
     ].join(";");
 
-    qr.src =
-        "https://api.qrserver.com/v1/create-qr-code/" +
-        "?size=360x360" +
-        "&margin=0" +
-        "&data=" +
-        encodeURIComponent(data);
+    qr.innerHTML = "";
+
+    if (typeof QRCode === "undefined") {
+        qr.textContent = "QR-код";
+        return;
+    }
+
+    qrCodeInstance = new QRCode(qr, {
+        text: data,
+        width: 360,
+        height: 360,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+    });
 }
 
 date.textContent = formatDate(paymentDate);
@@ -626,6 +679,7 @@ date.addEventListener("click", function() {
     }
 
     paymentDate = newDate;
+    timerStateActual = null;
 
     localStorage.setItem(
         KEY.payment,
