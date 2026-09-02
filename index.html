@@ -499,8 +499,9 @@ function updateTimer() {
         now.getTime() - paymentDate.getTime()
     );
 
-    const minutes = Math.floor(diff / 60000);
-    const seconds = 60 - now.getSeconds();
+    const totalSeconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
 
     timer.textContent =
         pad(minutes) + ":" + pad(seconds);
