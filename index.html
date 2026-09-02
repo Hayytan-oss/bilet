@@ -19,6 +19,11 @@
 
 <link
     rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
     href="https://fonts.gstatic.com"
     crossorigin
 >
@@ -753,7 +758,40 @@ const ticketNumber =
    ДАТА ОПЛАТЫ
 ========================= */
 
-let paymentDate = new Date();
+/*
+   ВАЖНО:
+
+   Если дата уже сохранена в localStorage,
+   используем её.
+
+   Поэтому обновление страницы,
+   закрытие страницы или повторное открытие
+   НЕ сбрасывает таймер.
+*/
+
+let savedPaymentDate =
+    localStorage.getItem("ticketPaymentDate");
+
+
+let paymentDate;
+
+
+if (savedPaymentDate) {
+
+    paymentDate =
+        new Date(Number(savedPaymentDate));
+
+} else {
+
+    paymentDate =
+        new Date();
+
+    localStorage.setItem(
+        "ticketPaymentDate",
+        paymentDate.getTime()
+    );
+
+}
 
 
 /* =========================
@@ -981,8 +1019,15 @@ function formatTimer(totalSeconds) {
 
 function updateTimer() {
 
-    const now = new Date();
+    const now =
+        new Date();
 
+
+    /*
+       Считаем реальную разницу
+       между текущим временем
+       и сохранённым временем оплаты.
+    */
 
     let elapsed =
         Math.floor(
@@ -1147,7 +1192,18 @@ document
             }
 
 
-            paymentDate = newDate;
+            /*
+               Сохраняем новую дату.
+            */
+
+            paymentDate =
+                newDate;
+
+
+            localStorage.setItem(
+                "ticketPaymentDate",
+                paymentDate.getTime()
+            );
 
 
             updateDateDisplay();
@@ -1214,7 +1270,7 @@ document
 
 
 /* =========================
-   КНОПКА
+   КНОПКА «СКАЧАТЬ БИЛЕТ»
 ========================= */
 
 document
@@ -1224,12 +1280,44 @@ document
         function () {
 
             /*
-               При нажатии таймер
-               начинается заново.
+               Нажатие кнопки создаёт
+               НОВЫЙ момент оплаты.
+
+               Например:
+
+               было:
+               12:40:00
+
+               пользователь нажал кнопку
+               в 12:41:15
+
+               новая точка отсчёта:
+               12:41:15
+
+               таймер:
+               00:00
+
+               через 1 секунду:
+               00:01
+
+               через 45 секунд:
+               00:45
             */
 
             paymentDate =
                 new Date();
+
+
+            /*
+               Сохраняем новую точку отсчёта,
+               чтобы обновление страницы
+               её не сбило.
+            */
+
+            localStorage.setItem(
+                "ticketPaymentDate",
+                paymentDate.getTime()
+            );
 
 
             updateDateDisplay();
