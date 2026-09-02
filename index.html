@@ -14,15 +14,15 @@ html,
 body {
     margin: 0;
     padding: 0;
-    background: #eeeeee;
+    width: 100%;
+    min-height: 100%;
+    background: #f2f3f4;
     font-family: Arial, Helvetica, sans-serif;
     color: #111;
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    padding: 30px 15px;
+    display: block;
 }
 
 /* =========================
@@ -32,10 +32,11 @@ body {
 .ticket {
     width: 430px;
     max-width: 100%;
+    margin: 0;
     background: #f2f3f4;
-    border-radius: 34px;
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 15px 45px rgba(0,0,0,.15);
+    box-shadow: none;
 }
 
 /* =========================
@@ -200,7 +201,7 @@ body {
     margin: 20px auto 14px;
 
     background: #fff;
-    border-radius: 8px;
+    border-radius: 0;
 
     overflow: hidden;
 
@@ -297,14 +298,6 @@ body {
 ========================= */
 
 @media (max-width: 480px) {
-
-    body {
-        padding: 10px;
-    }
-
-    .ticket {
-        border-radius: 25px;
-    }
 
     .content {
         padding-left: 25px;
@@ -474,16 +467,12 @@ body {
         <div class="info">
 
             Серия:
-            <span id="series">
-                QR260901000636
-            </span>
+            <span id="series"></span>
 
             <br>
 
             Номер:
-            <span id="number">
-                20260901173500141
-            </span>
+            <span id="number"></span>
 
         </div>
 
@@ -517,9 +506,10 @@ body {
 const STORAGE_PAYMENT = "ticketPaymentDate";
 const STORAGE_ROUTE = "ticketRoute";
 const STORAGE_VEHICLE = "ticketVehicle";
-
 const STORAGE_SERIES = "ticketSeries";
 const STORAGE_NUMBER = "ticketNumber";
+const STORAGE_SERIES_SUFFIX = "ticketSeriesSuffix";
+const STORAGE_NUMBER_SUFFIX = "ticketNumberSuffix";
 
 
 /* =========================================================
@@ -552,7 +542,7 @@ const downloadButton =
 
 
 /* =========================================================
-   DEFAULT DATA
+   DEFAULTS
 ========================================================= */
 
 const DEFAULT_ROUTE =
@@ -643,105 +633,54 @@ if (savedVehicle) {
 
 
 /* =========================================================
-   FORMAT DATE
+   HELPERS
 ========================================================= */
 
 function pad(value) {
 
-    return String(value)
-        .padStart(2, "0");
+    return String(value).padStart(2, "0");
 
 }
 
 
 function formatDate(date) {
 
-    const day =
-        pad(date.getDate());
-
-    const month =
-        pad(date.getMonth() + 1);
-
-    const year =
-        date.getFullYear();
-
-    const hours =
-        pad(date.getHours());
-
-    const minutes =
-        pad(date.getMinutes());
-
     return (
-        day +
+        pad(date.getDate()) +
         "." +
-        month +
+        pad(date.getMonth() + 1) +
         "." +
-        year +
+        date.getFullYear() +
         " " +
-        hours +
+        pad(date.getHours()) +
         ":" +
-        minutes
+        pad(date.getMinutes())
     );
 }
 
-
-/* =========================================================
-   QR DATE
-========================================================= */
 
 function formatQRDate(date) {
 
-    const year =
-        date.getFullYear();
-
-    const month =
-        pad(date.getMonth() + 1);
-
-    const day =
-        pad(date.getDate());
-
-    const hours =
-        pad(date.getHours());
-
-    const minutes =
-        pad(date.getMinutes());
-
-    const seconds =
-        pad(date.getSeconds());
-
     return (
-        year +
-        month +
-        day +
+        date.getFullYear() +
+        pad(date.getMonth() + 1) +
+        pad(date.getDate()) +
         "T" +
-        hours +
-        minutes +
-        seconds
+        pad(date.getHours()) +
+        pad(date.getMinutes()) +
+        pad(date.getSeconds())
     );
 }
 
 
 /* =========================================================
-   GENERATE SERIES
-=========================================================
-
-   Формат:
-
-   QR + YYMMDD + 6 цифр
-
-   Например:
-
-   02.09.2026
-
-   QR260902000636
-
+   SERIES
 ========================================================= */
 
 function generateSeries(date) {
 
     const year =
-        String(date.getFullYear())
-        .slice(-2);
+        String(date.getFullYear()).slice(-2);
 
     const month =
         pad(date.getMonth() + 1);
@@ -750,7 +689,9 @@ function generateSeries(date) {
         pad(date.getDate());
 
     let suffix =
-        localStorage.getItem("ticketSeriesSuffix");
+        localStorage.getItem(
+            STORAGE_SERIES_SUFFIX
+        );
 
     if (!suffix) {
 
@@ -763,7 +704,7 @@ function generateSeries(date) {
             );
 
         localStorage.setItem(
-            "ticketSeriesSuffix",
+            STORAGE_SERIES_SUFFIX,
             suffix
         );
     }
@@ -779,19 +720,7 @@ function generateSeries(date) {
 
 
 /* =========================================================
-   GENERATE NUMBER
-=========================================================
-
-   Формат:
-
-   YYYYMMDDHHMMSS + 3 цифры
-
-   Например:
-
-   01.09.2026 17:35:00
-
-   20260901173500141
-
+   NUMBER
 ========================================================= */
 
 function generateNumber(date) {
@@ -815,7 +744,9 @@ function generateNumber(date) {
         pad(date.getSeconds());
 
     let suffix =
-        localStorage.getItem("ticketNumberSuffix");
+        localStorage.getItem(
+            STORAGE_NUMBER_SUFFIX
+        );
 
     if (!suffix) {
 
@@ -828,7 +759,7 @@ function generateNumber(date) {
             );
 
         localStorage.setItem(
-            "ticketNumberSuffix",
+            STORAGE_NUMBER_SUFFIX,
             suffix
         );
     }
@@ -846,7 +777,7 @@ function generateNumber(date) {
 
 
 /* =========================================================
-   UPDATE TICKET IDENTIFIERS
+   UPDATE IDENTIFIERS
 ========================================================= */
 
 function updateTicketIdentifiers() {
@@ -876,7 +807,7 @@ function updateTicketIdentifiers() {
 
 
 /* =========================================================
-   INITIAL IDENTIFIERS
+   LOAD IDENTIFIERS
 ========================================================= */
 
 const savedSeries =
@@ -885,7 +816,10 @@ const savedSeries =
 const savedNumber =
     localStorage.getItem(STORAGE_NUMBER);
 
-if (savedSeries && savedNumber) {
+if (
+    savedSeries &&
+    savedNumber
+) {
 
     seriesElement.textContent =
         savedSeries;
@@ -901,18 +835,6 @@ if (savedSeries && savedNumber) {
 
 /* =========================================================
    TIMER
-=========================================================
-
-   Логика:
-
-   Покупка в 12:40
-
-   12:41:00 -> 01:00
-   12:41:20 -> 01:40
-   12:41:40 -> 01:20
-   12:41:59 -> 01:01
-   12:42:00 -> 02:00
-
 ========================================================= */
 
 function updateTimer() {
@@ -933,18 +855,12 @@ function updateTimer() {
         elapsedMinutes = 0;
     }
 
-
     let remainingSeconds =
         60 - now.getSeconds();
 
-
-    if (
-        remainingSeconds === 60
-    ) {
-
+    if (remainingSeconds === 60) {
         remainingSeconds = 60;
     }
-
 
     timerElement.textContent =
         pad(elapsedMinutes) +
@@ -954,11 +870,13 @@ function updateTimer() {
 
 
 /* =========================================================
-   DATE DISPLAY
+   INITIAL
 ========================================================= */
 
 dateElement.textContent =
     formatDate(paymentDate);
+
+updateTimer();
 
 
 /* =========================================================
@@ -979,7 +897,6 @@ function generateQR() {
     const number =
         numberElement.textContent;
 
-
     const qrData =
         [
             "PROTOTYPE_TICKET",
@@ -991,7 +908,6 @@ function generateQR() {
             "VEHICLE=" + vehicle
         ].join(";");
 
-
     const qrUrl =
         "https://api.qrserver.com/v1/create-qr-code/" +
         "?size=360x360" +
@@ -999,22 +915,15 @@ function generateQR() {
         "&data=" +
         encodeURIComponent(qrData);
 
-
     qrImage.src =
         qrUrl;
 }
 
-
-/* =========================================================
-   INITIAL UPDATE
-========================================================= */
-
-updateTimer();
 generateQR();
 
 
 /* =========================================================
-   TIMER LOOP
+   TIMER UPDATE
 ========================================================= */
 
 setInterval(
@@ -1031,13 +940,10 @@ routeElement.addEventListener(
     "click",
     function () {
 
-        const current =
-            routeElement.textContent;
-
         const newRoute =
             prompt(
                 "Введите маршрут:",
-                current
+                routeElement.textContent
             );
 
         if (
@@ -1047,16 +953,16 @@ routeElement.addEventListener(
             return;
         }
 
-
-        routeElement.textContent =
+        const value =
             newRoute.trim();
 
+        routeElement.textContent =
+            value;
 
         localStorage.setItem(
             STORAGE_ROUTE,
-            newRoute.trim()
+            value
         );
-
 
         generateQR();
     }
@@ -1073,13 +979,10 @@ document
         "click",
         function () {
 
-            const current =
-                vehicleElement.textContent;
-
             const newVehicle =
                 prompt(
                     "Введите номер Т/С:",
-                    current
+                    vehicleElement.textContent
                 );
 
             if (
@@ -1089,16 +992,16 @@ document
                 return;
             }
 
-
-            vehicleElement.textContent =
+            const value =
                 newVehicle.trim();
 
+            vehicleElement.textContent =
+                value;
 
             localStorage.setItem(
                 STORAGE_VEHICLE,
-                newVehicle.trim()
+                value
             );
-
 
             generateQR();
         }
@@ -1113,13 +1016,10 @@ dateElement.addEventListener(
     "click",
     function () {
 
-        const current =
-            formatDate(paymentDate);
-
         const newDate =
             prompt(
                 "Введите дату и время:\nДД.ММ.ГГГГ ЧЧ:ММ",
-                current
+                formatDate(paymentDate)
             );
 
         if (
@@ -1129,14 +1029,12 @@ dateElement.addEventListener(
             return;
         }
 
-
         const match =
             newDate
                 .trim()
                 .match(
                     /^(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})$/
                 );
-
 
         if (!match) {
 
@@ -1146,7 +1044,6 @@ dateElement.addEventListener(
 
             return;
         }
-
 
         const day =
             Number(match[1]);
@@ -1163,7 +1060,6 @@ dateElement.addEventListener(
         const minutes =
             Number(match[5]);
 
-
         const newPaymentDate =
             new Date(
                 year,
@@ -1174,7 +1070,6 @@ dateElement.addEventListener(
                 0,
                 0
             );
-
 
         if (
             isNaN(newPaymentDate.getTime()) ||
@@ -1190,10 +1085,8 @@ dateElement.addEventListener(
             return;
         }
 
-
         paymentDate =
             newPaymentDate;
-
 
         localStorage.setItem(
             STORAGE_PAYMENT,
@@ -1202,23 +1095,10 @@ dateElement.addEventListener(
             )
         );
 
-
-        /*
-         * При изменении даты
-         * меняем дату и в серии,
-         * и в номере.
-         *
-         * Суффиксы сохраняем,
-         * поэтому меняется именно
-         * временная часть идентификаторов.
-         */
-
         updateTicketIdentifiers();
-
 
         dateElement.textContent =
             formatDate(paymentDate);
-
 
         updateTimer();
 
@@ -1235,17 +1115,8 @@ downloadButton.addEventListener(
     "click",
     function () {
 
-        /*
-         * Создаём новое время оплаты.
-         */
-
         paymentDate =
             new Date();
-
-
-        /*
-         * Сохраняем его.
-         */
 
         localStorage.setItem(
             STORAGE_PAYMENT,
@@ -1254,14 +1125,8 @@ downloadButton.addEventListener(
             )
         );
 
-
-        /*
-         * Создаём новый случайный
-         * суффикс серии.
-         */
-
         localStorage.setItem(
-            "ticketSeriesSuffix",
+            STORAGE_SERIES_SUFFIX,
             String(
                 Math.floor(
                     100000 +
@@ -1270,14 +1135,8 @@ downloadButton.addEventListener(
             )
         );
 
-
-        /*
-         * Создаём новый случайный
-         * суффикс номера.
-         */
-
         localStorage.setItem(
-            "ticketNumberSuffix",
+            STORAGE_NUMBER_SUFFIX,
             String(
                 Math.floor(
                     100 +
@@ -1286,14 +1145,8 @@ downloadButton.addEventListener(
             )
         );
 
-
-        /*
-         * Обновляем всё.
-         */
-
         dateElement.textContent =
             formatDate(paymentDate);
-
 
         updateTicketIdentifiers();
 
@@ -1301,19 +1154,11 @@ downloadButton.addEventListener(
 
         generateQR();
 
-
-        /*
-         * Небольшая вибрация
-         * на поддерживаемых устройствах.
-         */
-
         if (
             navigator.vibrate
         ) {
-
             navigator.vibrate(20);
         }
-
     }
 );
 
