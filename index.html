@@ -1,1833 +1,922 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
->
-
-<title>Уведомление об оплате</title>
-
-
-<!-- =========================
-     ШРИФТ
-========================= -->
-
-<link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
->
-
-<link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
->
-
-<link
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-    rel="stylesheet"
->
-
-
-<!-- =========================
-     QR CODE
-========================= -->
-
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
-    defer
-></script>
-
+<title>Билет</title>
 
 <style>
-
-/* =========================================================
-   БАЗОВЫЕ НАСТРОЙКИ
-========================================================= */
-
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body {
-    margin: 0;
-    padding: 0;
-
-    width: 100%;
-    min-height: 100%;
-
-    background: #f4f5f6;
-
-    font-family: "Roboto", Arial, sans-serif;
-
-    color: #444;
-
-    -webkit-font-smoothing: antialiased;
-    text-rendering: geometricPrecision;
+  margin: 0;
+  padding: 0;
+  background: #f4f5f6;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #111;
 }
-
-body {
-    overflow-x: hidden;
-}
-
-button {
-    font-family: "Roboto", Arial, sans-serif;
-}
-
-
-/* =========================================================
-   ОСНОВНОЙ КОНТЕЙНЕР
-========================================================= */
 
 .ticket {
-    width: 100%;
-    min-height: 100vh;
-
-    background: #f4f5f6;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  background: #f4f5f6;
+  overflow: hidden;
 }
 
-
-/* =========================================================
-   ВЕРХНИЙ СИНИЙ БЛОК
-========================================================= */
+/* ================= HEADER ================= */
 
 .header {
-    position: relative;
-
-    width: 100%;
-    height: 102px;
-
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-
-    padding-bottom: 15px;
-
-    overflow: hidden;
-
-    background: #2498ed;
+  position: relative;
+  width: 100%;
+  height: 102px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 15px;
+  overflow: hidden;
+  background: #2498ed;
 }
-
-
-/* Верхняя дуга */
 
 .header::before {
-    content: "";
-
-    position: absolute;
-
-    width: 370px;
-    height: 95px;
-
-    top: -58px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    background: #126cae;
-
-    border-radius: 50%;
+  content: "";
+  position: absolute;
+  width: 370px;
+  height: 95px;
+  top: -58px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #126cae;
+  border-radius: 50%;
 }
-
-
-/* Заголовок */
 
 .header-title {
-    position: relative;
-
-    z-index: 2;
-
-    color: #ffffff;
-
-    font-size: 20px;
-    line-height: 1;
-
-    font-weight: 300;
-
-    white-space: nowrap;
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 300;
 }
 
-.header-title::before {
-    content: "—";
-
-    margin-right: 7px;
-}
-
-.header-title::after {
-    content: "—";
-
-    margin-left: 7px;
-}
-
-
-/* =========================================================
-   ВОЛНА
-========================================================= */
+/* ================= WAVE ================= */
 
 .wave {
-    position: relative;
-
-    width: 100%;
-    height: 34px;
-
-    overflow: hidden;
-
-    margin-top: -1px;
+  position: relative;
+  width: 100%;
+  height: 34px;
+  overflow: hidden;
+  margin-top: -1px;
 }
 
 .wave::before {
-    content: "";
-
-    position: absolute;
-
-    width: 125%;
-    height: 48px;
-
-    left: -12.5%;
-    top: -17px;
-
-    background: #c8e9ea;
-
-    border-radius:
-        50% 50% 0 0 /
-        42% 42% 0 0;
+  content: "";
+  position: absolute;
+  width: 125%;
+  height: 48px;
+  left: -12.5%;
+  top: -17px;
+  background: #c8e9ea;
+  border-radius: 50% 50% 0 0 / 42% 42% 0 0;
 }
 
 .wave::after {
-    content: "";
-
-    position: absolute;
-
-    width: 125%;
-    height: 32px;
-
-    left: -12.5%;
-    top: -1px;
-
-    background: #f4f5f6;
-
-    border-radius:
-        50% 50% 0 0 /
-        55% 55% 0 0;
+  content: "";
+  position: absolute;
+  width: 125%;
+  height: 32px;
+  left: -12.5%;
+  top: -1px;
+  background: #f4f5f6;
+  border-radius: 50% 50% 0 0 / 55% 55% 0 0;
 }
 
-
-/* =========================================================
-   КОНТЕНТ
-========================================================= */
+/* ================= CONTENT ================= */
 
 .content {
-    width: 100%;
-
-    padding:
-        0
-        18px
-        30px;
-
-    text-align: center;
+  width: 100%;
+  padding: 0 18px 30px;
+  text-align: center;
 }
-
-
-/* =========================================================
-   УСПЕШНАЯ ОПЛАТА
-========================================================= */
 
 .success {
-    margin: 0;
-
-    font-size: 18px;
-    line-height: 1.3;
-
-    font-weight: 400;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 400;
 }
 
-
-/* =========================================================
-   МАРШРУТ
-========================================================= */
+/* ================= ROUTE ================= */
 
 .route {
-    margin-top: 43px;
-
-    font-size: 20px;
-    line-height: 1.15;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    user-select: none;
-
-    -webkit-tap-highlight-color: transparent;
+  margin-top: 43px;
+  font-size: 20px;
+  line-height: 1.15;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
 }
 
-
-/* =========================================================
-   ЦЕНА
-========================================================= */
+/* ================= PRICE ================= */
 
 .price {
-    margin-top: 10px;
-
-    font-size: 48px;
-    line-height: 1;
-
-    font-weight: 700;
-
-    letter-spacing: -1px;
+  margin-top: 10px;
+  font-size: 48px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -1px;
 }
 
 .price span {
-    font-size: 48px;
-
-    font-weight: 400;
+  font-size: 48px;
+  font-weight: 400;
 }
 
-
-/* =========================================================
-   ДАТА
-========================================================= */
+/* ================= DATE ================= */
 
 .date {
-    margin-top: 28px;
-
-    font-size: 18px;
-    line-height: 1.2;
-
-    font-weight: 400;
-
-    cursor: pointer;
-
-    user-select: none;
-
-    -webkit-tap-highlight-color: transparent;
+  margin-top: 28px;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 400;
+  cursor: pointer;
+  user-select: none;
 }
-
-
-/* =========================================================
-   Т/С
-========================================================= */
 
 .ticket-code {
-    margin-top: 7px;
-
-    font-size: 18px;
-    line-height: 1.2;
-
-    font-weight: 400;
-
-    cursor: pointer;
-
-    user-select: none;
-
-    -webkit-tap-highlight-color: transparent;
+  margin-top: 7px;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 400;
 }
 
-.ticket-code strong {
-    font-weight: 400;
-}
-
-
-/* =========================================================
-   ЗАГОЛОВОК ТАЙМЕРА
-========================================================= */
+/* ================= TIMER ================= */
 
 .timer-title {
-    margin-top: 37px;
-
-    font-size: 18px;
-    line-height: 1.3;
-
-    font-weight: 400;
+  margin-top: 37px;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 400;
 }
-
-
-/* =========================================================
-   ТАЙМЕР
-========================================================= */
 
 .timer {
-    margin-top: 3px;
-
-    font-size: 32px;
-    line-height: 1;
-
-    font-weight: 700;
-
-    letter-spacing: -0.5px;
-
-    font-variant-numeric: tabular-nums;
+  margin-top: 3px;
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
 }
 
-
-/* =========================================================
-   QR
-========================================================= */
+/* ================= QR ================= */
 
 .qr-wrapper {
-    width: 360px;
-    height: 360px;
-
-    margin: 35px auto 0;
-
-    background: #ffffff;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
+  width: 360px;
+  height: 360px;
+  margin: 35px auto 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 #qrcode {
-    width: 360px;
-    height: 360px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 360px;
+  height: 360px;
+  display: block;
+  background: #fff;
 }
 
-#qrcode img,
-#qrcode canvas {
-    width: 360px !important;
-    height: 360px !important;
-
-    display: block;
+#qrcode img {
+  display: block;
+  width: 360px !important;
+  height: 360px !important;
+  max-width: none !important;
+  max-height: none !important;
 }
 
-
-/* =========================================================
-   ИНФОРМАЦИЯ О БИЛЕТЕ
-========================================================= */
+/* ================= INFO ================= */
 
 .info {
-    margin-top: 38px;
-
-    font-size: 18px;
-    line-height: 1.55;
-
-    font-weight: 400;
+  margin-top: 38px;
+  font-size: 18px;
+  line-height: 1.55;
+  font-weight: 400;
 }
-
-.info strong {
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   ИНСТРУКЦИЯ
-========================================================= */
 
 .instruction {
-    margin: 39px auto 0;
-
-    max-width: 390px;
-
-    font-size: 18px;
-    line-height: 1.48;
-
-    font-weight: 400;
+  margin: 39px auto 0;
+  max-width: 390px;
+  font-size: 18px;
+  line-height: 1.48;
+  font-weight: 400;
 }
 
-
-/* =========================================================
-   КНОПКА
-========================================================= */
+/* ================= BUTTON ================= */
 
 .download {
-    display: block;
-
-    width: 100%;
-    height: 76px;
-
-    margin: 37px auto 0;
-
-    padding: 0;
-
-    border: none;
-
-    border-radius: 28px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #58c8d1 0%,
-            #4799ee 100%
-        );
-
-    color: #ffffff;
-
-    font-size: 25px;
-    line-height: 1;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 10px 28px
-        rgba(60,130,190,0.16);
-
-    -webkit-tap-highlight-color: transparent;
-
-    transition:
-        transform .12s ease,
-        box-shadow .12s ease;
+  display: block;
+  width: 100%;
+  height: 76px;
+  margin: 37px auto 0;
+  padding: 0;
+  border: none;
+  border-radius: 28px;
+  background: linear-gradient(
+    180deg,
+    #58c8d1 0%,
+    #4799ee 100%
+  );
+  color: #fff;
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(60,130,190,.16);
 }
 
 .download:active {
-    transform: scale(.985);
-
-    box-shadow:
-        0 5px 15px
-        rgba(60,130,190,.12);
+  transform: scale(.99);
 }
 
-
-/* =========================================================
-   DESKTOP
-========================================================= */
-
-@media (min-width: 601px) {
-
-    .content {
-        max-width: 520px;
-
-        margin: 0 auto;
-    }
-
-}
-
-
-/* =========================================================
-   МОБИЛЬНЫЕ
-========================================================= */
+/* ================= MOBILE ================= */
 
 @media (max-width: 390px) {
 
-    .header {
-        height: 100px;
-    }
+  .qr-wrapper,
+  #qrcode,
+  #qrcode img {
+    width: 320px !important;
+    height: 320px !important;
+  }
 
-    .header-title {
-        font-size: 18px;
-    }
-
-    .success {
-        font-size: 17px;
-    }
-
-    .route {
-        font-size: 19px;
-
-        margin-top: 40px;
-    }
-
-    .price,
-    .price span {
-        font-size: 44px;
-    }
-
-    .date,
-    .ticket-code,
-    .timer-title,
-    .info,
-    .instruction {
-        font-size: 17px;
-    }
-
-    .timer {
-        font-size: 30px;
-    }
-
-    .qr-wrapper {
-        width: 100%;
-        height: auto;
-
-        aspect-ratio: 1 / 1;
-    }
-
-    #qrcode {
-        width: 100%;
-        height: 100%;
-    }
-
-    #qrcode img,
-    #qrcode canvas {
-        width: 100% !important;
-        height: 100% !important;
-    }
-
+  .content {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
-
 </style>
-
 </head>
-
 
 <body>
 
 <div class="ticket">
 
+  <div class="header">
+    <div class="header-title">
+      Оплата проезда
+    </div>
+  </div>
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+  <div class="wave"></div>
 
-    <header class="header">
+  <div class="content">
 
-        <div class="header-title">
-            Уведомление об оплате
-        </div>
+    <p class="success">
+      Проезд оплачен
+    </p>
 
-    </header>
+    <div
+      class="route"
+      id="route"
+      title="Нажмите для изменения"
+    >
+      Трамвай: №3
+    </div>
 
+    <div class="price">
+      42<span> ₽</span>
+    </div>
 
-    <!-- =====================================================
-         WAVE
-    ====================================================== -->
+    <div
+      class="date"
+      id="date"
+      title="Нажмите для изменения"
+    >
+      01.09.2026 17:35
+    </div>
 
-    <div class="wave"></div>
+    <div class="ticket-code">
+      Т/С: <strong id="vehicle">734</strong>
+    </div>
 
+    <div class="timer-title">
+      Время с момента оплаты
+    </div>
 
-    <!-- =====================================================
-         CONTENT
-    ====================================================== -->
+    <div
+      class="timer"
+      id="timer"
+    >
+      00:00
+    </div>
 
-    <main class="content">
+    <!-- QR -->
+    <div class="qr-wrapper">
+      <div id="qrcode"></div>
+    </div>
 
+    <div class="info">
+      Серия: <span id="series">QR200938000636</span><br>
+      Номер: <span id="number">20260901173500141</span>
+    </div>
 
-        <!-- ОПЛАТА -->
+    <div class="instruction">
+      Предъявите QR-код контролёру
+      при проверке проезда
+    </div>
 
-        <div class="success">
-            Ваш проезд успешно оплачен!
-        </div>
+    <button
+      class="download"
+      id="downloadButton"
+      type="button"
+    >
+      Скачать билет
+    </button>
 
-
-        <!-- МАРШРУТ -->
-
-        <div
-            class="route"
-            id="route"
-            title="Нажмите для изменения"
-        >
-            Трамвай: №3
-        </div>
-
-
-        <!-- СУММА -->
-
-        <div class="price">
-            42 <span>₽</span>
-        </div>
-
-
-        <!-- ДАТА -->
-
-        <div
-            class="date"
-            id="paymentDate"
-            title="Нажмите для изменения"
-        >
-            Загрузка...
-        </div>
-
-
-        <!-- Т/С -->
-
-        <div
-            class="ticket-code"
-            id="vehicle"
-            title="Нажмите для изменения"
-        >
-            Т/С: <strong>734</strong>
-        </div>
-
-
-        <!-- ТАЙМЕР -->
-
-        <div class="timer-title">
-            С момента оплаты прошло:
-        </div>
-
-
-        <div
-            class="timer"
-            id="timer"
-        >
-            00:00
-        </div>
-
-
-        <!-- QR -->
-
-        <div class="qr-wrapper">
-
-            <div id="qrcode"></div>
-
-        </div>
-
-
-        <!-- ДАННЫЕ -->
-
-        <div class="info">
-
-            Серия билета:
-            <strong>
-                QR200938000636
-            </strong>
-
-            <br>
-
-            Номер билета:
-            <strong>
-                20260901173500141
-            </strong>
-
-        </div>
-
-
-        <!-- ИНСТРУКЦИЯ -->
-
-        <div class="instruction">
-
-            Предъявите контролеру QR-код.<br>
-
-            Чтобы сохранить реквизиты билета,
-            нажмите кнопку «Скачать»
-
-        </div>
-
-
-        <!-- КНОПКА -->
-
-        <button
-            class="download"
-            id="downloadButton"
-            type="button"
-        >
-            Скачать билет
-        </button>
-
-
-    </main>
-
+  </div>
 </div>
 
 
 <script>
+(function () {
 
-/* =========================================================
-   НАСТРОЙКИ / ДАННЫЕ
-========================================================= */
+  /* =========================================================
+     НАСТРОЙКИ
+  ========================================================= */
 
+  const STORAGE_PAYMENT = "ticketPaymentDate";
+  const STORAGE_ROUTE = "ticketRoute";
+  const STORAGE_VEHICLE = "ticketVehicle";
 
-/*
-   Название ключей localStorage.
+  const DEFAULT_ROUTE = "Трамвай: №3";
+  const DEFAULT_VEHICLE = "734";
 
-   Они нужны для того, чтобы данные не пропадали
-   после обновления страницы.
-*/
-
-const STORAGE_PAYMENT =
-    "ticketPaymentDate";
-
-const STORAGE_ROUTE =
-    "ticketRoute";
-
-const STORAGE_VEHICLE =
-    "ticketVehicle";
+  const ticketSeries = "QR200938000636";
+  const ticketNumber = "20260901173500141";
 
 
-/* =========================================================
-   МАРШРУТ
-========================================================= */
+  /* =========================================================
+     СОСТОЯНИЕ
+  ========================================================= */
 
-let route =
-    localStorage.getItem(STORAGE_ROUTE);
-
-
-if (!route) {
-
-    route =
-        "Трамвай: №3";
-
-    localStorage.setItem(
-        STORAGE_ROUTE,
-        route
-    );
-
-}
+  let paymentDate;
 
 
-/* =========================================================
-   Т/С
-========================================================= */
+  /* =========================================================
+     ПОЛУЧАЕМ СОХРАНЁННУЮ ДАТУ ОПЛАТЫ
+  ========================================================= */
 
-let vehicle =
-    localStorage.getItem(STORAGE_VEHICLE);
+  const savedPayment = localStorage.getItem(STORAGE_PAYMENT);
 
-
-if (!vehicle) {
-
-    vehicle =
-        "734";
-
-    localStorage.setItem(
-        STORAGE_VEHICLE,
-        vehicle
-    );
-
-}
-
-
-/* =========================================================
-   СЕРИЯ / НОМЕР
-========================================================= */
-
-const ticketSeries =
-    "QR200938000636";
-
-const ticketNumber =
-    "20260901173500141";
-
-
-/* =========================================================
-   ВРЕМЯ ОПЛАТЫ
-========================================================= */
-
-
-/*
-   Пытаемся получить ранее сохранённое время оплаты.
-*/
-
-const savedPayment =
-    localStorage.getItem(
-        STORAGE_PAYMENT
-    );
-
-
-let paymentDate;
-
-
-/*
-   Если время уже было сохранено —
-   используем его.
-
-   Это главное условие, благодаря которому
-   F5 НЕ сбрасывает таймер.
-*/
-
-if (
+  if (
     savedPayment &&
     !isNaN(Number(savedPayment))
-) {
+  ) {
 
-    paymentDate =
-        new Date(
-            Number(savedPayment)
+    paymentDate = new Date(
+      Number(savedPayment)
+    );
+
+  } else {
+
+    paymentDate = new Date();
+
+    localStorage.setItem(
+      STORAGE_PAYMENT,
+      String(paymentDate.getTime())
+    );
+  }
+
+
+  /* =========================================================
+     ROUTE
+  ========================================================= */
+
+  let route =
+    localStorage.getItem(STORAGE_ROUTE)
+    || DEFAULT_ROUTE;
+
+
+  /* =========================================================
+     VEHICLE
+  ========================================================= */
+
+  let vehicle =
+    localStorage.getItem(STORAGE_VEHICLE)
+    || DEFAULT_VEHICLE;
+
+
+  /* =========================================================
+     DOM
+  ========================================================= */
+
+  const routeElement =
+    document.getElementById("route");
+
+  const vehicleElement =
+    document.getElementById("vehicle");
+
+  const dateElement =
+    document.getElementById("date");
+
+  const timerElement =
+    document.getElementById("timer");
+
+  const qrElement =
+    document.getElementById("qrcode");
+
+  const downloadButton =
+    document.getElementById("downloadButton");
+
+
+  /* =========================================================
+     DATE FORMAT
+  ========================================================= */
+
+  function pad(number) {
+    return String(number).padStart(2, "0");
+  }
+
+
+  function formatDate(date) {
+
+    return (
+      pad(date.getDate()) +
+      "." +
+      pad(date.getMonth() + 1) +
+      "." +
+      date.getFullYear() +
+      " " +
+      pad(date.getHours()) +
+      ":" +
+      pad(date.getMinutes())
+    );
+
+  }
+
+
+  function formatQRDate(date) {
+
+    return (
+      date.getFullYear() +
+      pad(date.getMonth() + 1) +
+      pad(date.getDate()) +
+      "T" +
+      pad(date.getHours()) +
+      pad(date.getMinutes()) +
+      pad(date.getSeconds())
+    );
+
+  }
+
+
+  /* =========================================================
+     TIMER
+  ========================================================= */
+
+  function formatTimer(seconds) {
+
+    seconds = Math.max(
+      0,
+      Math.floor(seconds)
+    );
+
+    const hours =
+      Math.floor(seconds / 3600);
+
+    const minutes =
+      Math.floor(
+        (seconds % 3600) / 60
+      );
+
+    const secs =
+      seconds % 60;
+
+
+    if (hours > 0) {
+
+      return (
+        pad(hours) +
+        ":" +
+        pad(minutes) +
+        ":" +
+        pad(secs)
+      );
+
+    }
+
+    return (
+      pad(minutes) +
+      ":" +
+      pad(secs)
+    );
+  }
+
+
+  function updateTimer() {
+
+    if (!paymentDate) return;
+
+    const now =
+      Date.now();
+
+    const paidAt =
+      paymentDate.getTime();
+
+    let elapsed =
+      Math.floor(
+        (now - paidAt) / 1000
+      );
+
+    if (elapsed < 0) {
+      elapsed = 0;
+    }
+
+    timerElement.textContent =
+      formatTimer(elapsed);
+  }
+
+
+  /*
+   * ВАЖНО:
+   * Таймер не считает сам себя.
+   * Каждые 250 мс он заново смотрит
+   * на реальное время Date.now().
+   */
+
+  updateTimer();
+
+  setInterval(
+    updateTimer,
+    250
+  );
+
+
+  /* =========================================================
+     DISPLAY
+  ========================================================= */
+
+  function updateDisplay() {
+
+    routeElement.textContent =
+      route;
+
+    vehicleElement.textContent =
+      vehicle;
+
+    dateElement.textContent =
+      formatDate(paymentDate);
+
+    updateTimer();
+  }
+
+
+  /* =========================================================
+     QR
+  ========================================================= */
+
+  function generateQR() {
+
+    /*
+     * Формируем содержимое QR.
+     */
+
+    const qrData =
+      "TICKET" +
+      ";SERIES=" +
+      encodeURIComponent(ticketSeries) +
+      ";NUMBER=" +
+      encodeURIComponent(ticketNumber) +
+      ";DATE=" +
+      encodeURIComponent(
+        formatQRDate(paymentDate)
+      ) +
+      ";ROUTE=" +
+      encodeURIComponent(route) +
+      ";AMOUNT=42" +
+      ";VEHICLE=" +
+      encodeURIComponent(vehicle);
+
+
+    /*
+     * Очищаем старый QR.
+     */
+
+    qrElement.innerHTML = "";
+
+
+    /*
+     * Используем внешний QR-сервис.
+     *
+     * Здесь больше НЕТ qrcodejs,
+     * поэтому отсутствует проблема
+     * с загрузкой библиотеки.
+     */
+
+    const img =
+      document.createElement("img");
+
+
+    img.alt =
+      "QR-код билета";
+
+    img.width = 360;
+
+    img.height = 360;
+
+
+    img.src =
+      "https://api.qrserver.com/v1/create-qr-code/" +
+      "?size=360x360" +
+      "&margin=0" +
+      "&data=" +
+      encodeURIComponent(qrData);
+
+
+    img.onerror =
+      function () {
+
+        qrElement.innerHTML =
+          "<div style=\"" +
+          "width:360px;" +
+          "height:360px;" +
+          "display:flex;" +
+          "align-items:center;" +
+          "justify-content:center;" +
+          "font-size:16px;" +
+          "color:#777;" +
+          "text-align:center;" +
+          "padding:30px;" +
+          "\">" +
+          "Не удалось загрузить QR-код" +
+          "</div>";
+
+      };
+
+
+    qrElement.appendChild(img);
+  }
+
+
+  /* =========================================================
+     EDIT ROUTE
+  ========================================================= */
+
+  routeElement.addEventListener(
+    "click",
+    function () {
+
+      const newRoute =
+        prompt(
+          "Введите маршрут:",
+          route
         );
 
-}
+
+      if (
+        newRoute !== null &&
+        newRoute.trim() !== ""
+      ) {
+
+        route =
+          newRoute.trim();
+
+        localStorage.setItem(
+          STORAGE_ROUTE,
+          route
+        );
+
+        updateDisplay();
+
+        generateQR();
+      }
+
+    }
+  );
 
 
-/*
-   Если сохранённого времени нет —
-   создаём его прямо сейчас.
-*/
+  /* =========================================================
+     EDIT VEHICLE
+  ========================================================= */
 
-if (
-    !paymentDate ||
-    isNaN(paymentDate.getTime())
-) {
+  vehicleElement.parentElement.addEventListener(
+    "click",
+    function () {
 
-    paymentDate =
+      const newVehicle =
+        prompt(
+          "Введите номер Т/С:",
+          vehicle
+        );
+
+
+      if (
+        newVehicle !== null &&
+        newVehicle.trim() !== ""
+      ) {
+
+        vehicle =
+          newVehicle.trim();
+
+        localStorage.setItem(
+          STORAGE_VEHICLE,
+          vehicle
+        );
+
+        updateDisplay();
+
+        generateQR();
+      }
+
+    }
+  );
+
+
+  /* =========================================================
+     EDIT DATE
+  ========================================================= */
+
+  dateElement.addEventListener(
+    "click",
+    function () {
+
+      const current =
+        formatDate(paymentDate);
+
+
+      const value =
+        prompt(
+          "Введите дату и время в формате ДД.ММ.ГГГГ ЧЧ:ММ",
+          current
+        );
+
+
+      if (!value) return;
+
+
+      const match =
+        value.match(
+          /^(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})$/
+        );
+
+
+      if (!match) {
+
+        alert(
+          "Неверный формат.\n\n" +
+          "Используйте:\n" +
+          "01.09.2026 17:35"
+        );
+
+        return;
+      }
+
+
+      const day =
+        Number(match[1]);
+
+      const month =
+        Number(match[2]) - 1;
+
+      const year =
+        Number(match[3]);
+
+      const hours =
+        Number(match[4]);
+
+      const minutes =
+        Number(match[5]);
+
+
+      const newDate =
+        new Date(
+          year,
+          month,
+          day,
+          hours,
+          minutes,
+          0
+        );
+
+
+      if (
+        isNaN(newDate.getTime())
+      ) {
+
+        alert(
+          "Не удалось установить дату."
+        );
+
+        return;
+      }
+
+
+      paymentDate =
+        newDate;
+
+
+      localStorage.setItem(
+        STORAGE_PAYMENT,
+        String(
+          paymentDate.getTime()
+        )
+      );
+
+
+      updateDisplay();
+
+      generateQR();
+    }
+  );
+
+
+  /* =========================================================
+     BUTTON
+  ========================================================= */
+
+  downloadButton.addEventListener(
+    "click",
+    function () {
+
+      /*
+       * НОВАЯ ОПЛАТА.
+       *
+       * Сбрасываем таймер именно
+       * в момент нажатия кнопки.
+       */
+
+      paymentDate =
         new Date();
 
 
-    localStorage.setItem(
+      /*
+       * Сохраняем новый момент оплаты.
+       */
+
+      localStorage.setItem(
         STORAGE_PAYMENT,
         String(
-            paymentDate.getTime()
+          paymentDate.getTime()
         )
-    );
-
-}
+      );
 
 
-/* =========================================================
-   ФОРМАТ ДАТЫ
-========================================================= */
+      /*
+       * Сразу показываем 00:00.
+       */
 
-function formatDate(date) {
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(2, "0");
+      timerElement.textContent =
+        "00:00";
 
 
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(2, "0");
+      /*
+       * Обновляем дату.
+       */
 
-
-    const year =
-        date.getFullYear();
-
-
-    const hours =
-        String(
-            date.getHours()
-        ).padStart(2, "0");
-
-
-    const minutes =
-        String(
-            date.getMinutes()
-        ).padStart(2, "0");
-
-
-    return (
-        day +
-        "." +
-        month +
-        "." +
-        year +
-        " " +
-        hours +
-        ":" +
-        minutes
-    );
-
-}
-
-
-/* =========================================================
-   ФОРМАТ ДАТЫ ДЛЯ QR
-========================================================= */
-
-function formatQRDate(date) {
-
-    const year =
-        date.getFullYear();
-
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(2, "0");
-
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(2, "0");
-
-
-    const hours =
-        String(
-            date.getHours()
-        ).padStart(2, "0");
-
-
-    const minutes =
-        String(
-            date.getMinutes()
-        ).padStart(2, "0");
-
-
-    const seconds =
-        String(
-            date.getSeconds()
-        ).padStart(2, "0");
-
-
-    return (
-        year +
-        month +
-        day +
-        "T" +
-        hours +
-        minutes +
-        seconds
-    );
-
-}
-
-
-/* =========================================================
-   ОТОБРАЖЕНИЕ ДАТЫ
-========================================================= */
-
-function updateDateDisplay() {
-
-    const element =
-        document.getElementById(
-            "paymentDate"
-        );
-
-
-    if (!element) {
-        return;
-    }
-
-
-    element.textContent =
+      dateElement.textContent =
         formatDate(paymentDate);
 
-}
+
+      /*
+       * Перегенерируем QR
+       * с новой датой.
+       */
+
+      generateQR();
 
 
-/* =========================================================
-   ОТОБРАЖЕНИЕ МАРШРУТА
-========================================================= */
+      /*
+       * Небольшая вибрация
+       * на телефоне.
+       */
 
-function updateRouteDisplay() {
+      if (
+        navigator.vibrate
+      ) {
 
-    const element =
-        document.getElementById(
-            "route"
-        );
+        navigator.vibrate(20);
 
-
-    if (!element) {
-        return;
-    }
-
-
-    element.textContent =
-        route;
-
-}
-
-
-/* =========================================================
-   ОТОБРАЖЕНИЕ Т/С
-========================================================= */
-
-function updateVehicleDisplay() {
-
-    const element =
-        document.getElementById(
-            "vehicle"
-        );
-
-
-    if (!element) {
-        return;
-    }
-
-
-    element.innerHTML =
-        "Т/С: <strong>" +
-        vehicle +
-        "</strong>";
-
-}
-
-
-/* =========================================================
-   ФОРМАТ ТАЙМЕРА
-========================================================= */
-
-function formatTimer(totalSeconds) {
-
-    /*
-       Защита от отрицательного значения.
-    */
-
-    if (
-        !Number.isFinite(totalSeconds) ||
-        totalSeconds < 0
-    ) {
-
-        totalSeconds = 0;
+      }
 
     }
+  );
 
 
-    totalSeconds =
-        Math.floor(
-            totalSeconds
-        );
+  /* =========================================================
+     INITIALIZATION
+  ========================================================= */
 
+  updateDisplay();
 
-    const hours =
-        Math.floor(
-            totalSeconds / 3600
-        );
+  generateQR();
 
-
-    const minutes =
-        Math.floor(
-            (
-                totalSeconds % 3600
-            ) / 60
-        );
-
-
-    const seconds =
-        totalSeconds % 60;
-
-
-    /*
-       Если меньше часа —
-       показываем MM:SS.
-    */
-
-    if (hours === 0) {
-
-        return (
-            String(minutes)
-                .padStart(2, "0") +
-            ":" +
-            String(seconds)
-                .padStart(2, "0")
-        );
-
-    }
-
-
-    /*
-       Если больше часа —
-       HH:MM:SS.
-    */
-
-    return (
-        String(hours)
-            .padStart(2, "0") +
-        ":" +
-        String(minutes)
-            .padStart(2, "0") +
-        ":" +
-        String(seconds)
-            .padStart(2, "0")
-    );
-
-}
-
-
-/* =========================================================
-   ТАЙМЕР
-========================================================= */
-
-function updateTimer() {
-
-    const timer =
-        document.getElementById(
-            "timer"
-        );
-
-
-    if (!timer) {
-        return;
-    }
-
-
-    /*
-       БЕРЁМ НАСТОЯЩЕЕ ВРЕМЯ.
-
-       Не прибавляем секунду к старому значению.
-
-       Каждый раз рассчитываем:
-
-       сейчас - время оплаты
-    */
-
-    const now =
-        Date.now();
-
-
-    const paidAt =
-        paymentDate.getTime();
-
-
-    let elapsed =
-        Math.floor(
-            (
-                now -
-                paidAt
-            ) / 1000
-        );
-
-
-    if (elapsed < 0) {
-        elapsed = 0;
-    }
-
-
-    timer.textContent =
-        formatTimer(
-            elapsed
-        );
-
-}
-
-
-/* =========================================================
-   ТАЙМЕР В РЕАЛЬНОМ ВРЕМЕНИ
-========================================================= */
-
-let lastDisplayedSecond =
-    -1;
-
-
-function timerLoop() {
-
-    const now =
-        Date.now();
-
-
-    const paidAt =
-        paymentDate.getTime();
-
-
-    let elapsed =
-        Math.floor(
-            (
-                now -
-                paidAt
-            ) / 1000
-        );
-
-
-    if (elapsed < 0) {
-        elapsed = 0;
-    }
-
-
-    /*
-       Перерисовываем цифры только тогда,
-       когда действительно прошла новая секунда.
-
-       При этом сам цикл работает постоянно.
-    */
-
-    if (
-        elapsed !==
-        lastDisplayedSecond
-    ) {
-
-        lastDisplayedSecond =
-            elapsed;
-
-
-        const timer =
-            document.getElementById(
-                "timer"
-            );
-
-
-        if (timer) {
-
-            timer.textContent =
-                formatTimer(
-                    elapsed
-                );
-
-        }
-
-    }
-
-
-    /*
-       Следующая отрисовка браузером.
-    */
-
-    requestAnimationFrame(
-        timerLoop
-    );
-
-}
-
-
-/* =========================================================
-   СОЗДАНИЕ QR
-========================================================= */
-
-function generateQR() {
-
-    const container =
-        document.getElementById(
-            "qrcode"
-        );
-
-
-    if (!container) {
-        return;
-    }
-
-
-    /*
-       Очищаем предыдущий QR.
-    */
-
-    container.innerHTML = "";
-
-
-    /*
-       Если библиотека ещё не загрузилась —
-       ничего не ломаем.
-
-       Повторим попытку позже.
-    */
-
-    if (
-        typeof QRCode ===
-        "undefined"
-    ) {
-
-        setTimeout(
-            generateQR,
-            300
-        );
-
-        return;
-
-    }
-
-
-    /*
-       Данные, которые записываются
-       внутрь QR.
-
-       Это демонстрационный QR,
-       а не настоящий транспортный билет.
-    */
-
-    const qrData =
-        "TICKET" +
-        ";SERIES=" +
-        ticketSeries +
-        ";NUMBER=" +
-        ticketNumber +
-        ";DATE=" +
-        formatQRDate(paymentDate) +
-        ";ROUTE=" +
-        route +
-        ";AMOUNT=42" +
-        ";VEHICLE=" +
-        vehicle;
-
-
-    try {
-
-        new QRCode(
-            container,
-            {
-                text:
-                    qrData,
-
-                width:
-                    360,
-
-                height:
-                    360,
-
-                colorDark:
-                    "#000000",
-
-                colorLight:
-                    "#ffffff",
-
-                correctLevel:
-                    QRCode.CorrectLevel.M
-            }
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Ошибка создания QR:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   РЕДАКТИРОВАНИЕ МАРШРУТА
-========================================================= */
-
-document
-    .getElementById("route")
-    .addEventListener(
-        "click",
-        function () {
-
-            const newRoute =
-                prompt(
-                    "Введите маршрут:",
-                    route
-                );
-
-
-            /*
-               Отмена.
-            */
-
-            if (
-                newRoute ===
-                null
-            ) {
-
-                return;
-
-            }
-
-
-            const clean =
-                newRoute.trim();
-
-
-            /*
-               Пустое значение не принимаем.
-            */
-
-            if (!clean) {
-
-                alert(
-                    "Маршрут не может быть пустым."
-                );
-
-                return;
-
-            }
-
-
-            route =
-                clean;
-
-
-            /*
-               Сохраняем маршрут.
-            */
-
-            localStorage.setItem(
-                STORAGE_ROUTE,
-                route
-            );
-
-
-            updateRouteDisplay();
-
-
-            /*
-               Обновляем QR.
-            */
-
-            generateQR();
-
-        }
-    );
-
-
-/* =========================================================
-   РЕДАКТИРОВАНИЕ ДАТЫ
-========================================================= */
-
-document
-    .getElementById("paymentDate")
-    .addEventListener(
-        "click",
-        function () {
-
-            const current =
-                formatDate(
-                    paymentDate
-                );
-
-
-            const value =
-                prompt(
-                    "Введите дату и время оплаты:\n\n" +
-                    "Формат: ДД.ММ.ГГГГ ЧЧ:ММ",
-                    current
-                );
-
-
-            if (
-                value ===
-                null
-            ) {
-
-                return;
-
-            }
-
-
-            /*
-               Проверяем формат.
-            */
-
-            const match =
-                value.match(
-                    /^(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})$/
-                );
-
-
-            if (!match) {
-
-                alert(
-                    "Неверный формат.\n\n" +
-                    "Например:\n" +
-                    "02.09.2026 12:40"
-                );
-
-                return;
-
-            }
-
-
-            const day =
-                Number(
-                    match[1]
-                );
-
-
-            const month =
-                Number(
-                    match[2]
-                ) - 1;
-
-
-            const year =
-                Number(
-                    match[3]
-                );
-
-
-            const hours =
-                Number(
-                    match[4]
-                );
-
-
-            const minutes =
-                Number(
-                    match[5]
-                );
-
-
-            const newDate =
-                new Date(
-                    year,
-                    month,
-                    day,
-                    hours,
-                    minutes,
-                    0
-                );
-
-
-            /*
-               Проверяем существование даты.
-
-               Например:
-               31.02.2026 — ошибка.
-            */
-
-            if (
-                newDate.getFullYear()
-                    !== year ||
-
-                newDate.getMonth()
-                    !== month ||
-
-                newDate.getDate()
-                    !== day ||
-
-                newDate.getHours()
-                    !== hours ||
-
-                newDate.getMinutes()
-                    !== minutes
-            ) {
-
-                alert(
-                    "Такой даты не существует."
-                );
-
-                return;
-
-            }
-
-
-            /*
-               Устанавливаем новую дату.
-            */
-
-            paymentDate =
-                newDate;
-
-
-            /*
-               СОХРАНЯЕМ её.
-
-               Поэтому F5 не сбросит таймер.
-            */
-
-            localStorage.setItem(
-                STORAGE_PAYMENT,
-                String(
-                    paymentDate.getTime()
-                )
-            );
-
-
-            /*
-               Сбрасываем внутреннее
-               значение цикла,
-               чтобы он сразу обновил цифры.
-            */
-
-            lastDisplayedSecond =
-                -1;
-
-
-            updateDateDisplay();
-
-            updateTimer();
-
-            generateQR();
-
-        }
-    );
-
-
-/* =========================================================
-   РЕДАКТИРОВАНИЕ Т/С
-========================================================= */
-
-document
-    .getElementById("vehicle")
-    .addEventListener(
-        "click",
-        function () {
-
-            const newVehicle =
-                prompt(
-                    "Введите номер Т/С:",
-                    vehicle
-                );
-
-
-            if (
-                newVehicle ===
-                null
-            ) {
-
-                return;
-
-            }
-
-
-            const clean =
-                newVehicle.trim();
-
-
-            if (!clean) {
-
-                alert(
-                    "Номер Т/С не может быть пустым."
-                );
-
-                return;
-
-            }
-
-
-            vehicle =
-                clean;
-
-
-            localStorage.setItem(
-                STORAGE_VEHICLE,
-                vehicle
-            );
-
-
-            updateVehicleDisplay();
-
-
-            /*
-               Обновляем QR.
-            */
-
-            generateQR();
-
-        }
-    );
-
-
-/* =========================================================
-   КНОПКА «СКАЧАТЬ БИЛЕТ»
-========================================================= */
-
-document
-    .getElementById("downloadButton")
-    .addEventListener(
-        "click",
-        function () {
-
-            /*
-               ВАЖНО:
-
-               Нажатие кнопки = новая
-               точка отсчёта.
-
-               Например:
-
-               было:
-               12:40:00
-
-               нажали кнопку:
-               12:41:17
-
-               становится:
-
-               12:41:17 → 00:00
-               12:41:18 → 00:01
-               12:42:17 → 01:00
-            */
-
-            paymentDate =
-                new Date();
-
-
-            /*
-               Сохраняем новый момент оплаты.
-            */
-
-            localStorage.setItem(
-                STORAGE_PAYMENT,
-                String(
-                    paymentDate.getTime()
-                )
-            );
-
-
-            /*
-               Разрешаем таймеру
-               сразу показать 00:00.
-            */
-
-            lastDisplayedSecond =
-                -1;
-
-
-            /*
-               Обновляем дату.
-            */
-
-            updateDateDisplay();
-
-
-            /*
-               Обновляем таймер.
-            */
-
-            updateTimer();
-
-
-            /*
-               Пересоздаём QR
-               с новым временем оплаты.
-            */
-
-            generateQR();
-
-
-            /*
-               Небольшая вибрация
-               на поддерживаемых устройствах.
-            */
-
-            if (
-                navigator.vibrate
-            ) {
-
-                navigator.vibrate(20);
-
-            }
-
-        }
-    );
-
-
-/* =========================================================
-   ПЕРВОНАЧАЛЬНАЯ ОТРИСОВКА
-========================================================= */
-
-updateDateDisplay();
-
-updateRouteDisplay();
-
-updateVehicleDisplay();
-
-updateTimer();
-
-
-/* =========================================================
-   ЗАПУСК ТАЙМЕРА
-========================================================= */
-
-/*
-   Запускаем независимо от QR.
-
-   Поэтому если QR-библиотека загрузится
-   с задержкой, таймер всё равно будет тикать.
-*/
-
-requestAnimationFrame(
-    timerLoop
-);
-
-
-/* =========================================================
-   ЗАПУСК QR
-========================================================= */
-
-/*
-   Поскольку script QRCode имеет defer,
-   дополнительно ждём полной загрузки страницы.
-*/
-
-if (
-    document.readyState ===
-    "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-
-            generateQR();
-
-        }
-    );
-
-}
-
-else {
-
-    generateQR();
-
-}
-
+})();
 </script>
 
 </body>
