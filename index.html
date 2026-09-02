@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 >
 
-<title>Уведомление об оплате — демо</title>
+<title>Уведомление об оплате</title>
 
 <link
     rel="preconnect"
@@ -240,7 +240,7 @@ button {
 
 
 /* =========================
-   ТРАМВАЙ
+   МАРШРУТ
 ========================= */
 
 .route {
@@ -252,6 +252,12 @@ button {
     font-weight: 700;
 
     letter-spacing: 0;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -489,36 +495,6 @@ button {
 
 
 /* =========================
-   ДОМЕН
-========================= */
-
-.domain {
-    display: inline-block;
-
-    margin-top: 15px;
-
-    padding:
-        10px
-        23px;
-
-    border-radius: 30px;
-
-    background: #ffffff;
-
-    color: #222;
-
-    font-size: 16px;
-    line-height: 1;
-
-    font-weight: 400;
-
-    box-shadow:
-        0 4px 14px
-        rgba(0,0,0,.05);
-}
-
-
-/* =========================
    DESKTOP
 ========================= */
 
@@ -641,7 +617,11 @@ button {
 
         <!-- ROUTE -->
 
-        <div class="route">
+        <div
+            class="route"
+            id="route"
+            title="Нажмите для изменения"
+        >
             Трамвай: №3
         </div>
 
@@ -742,13 +722,6 @@ button {
         </button>
 
 
-        <!-- DOMAIN -->
-
-        <div class="domain">
-            DEMO
-        </div>
-
-
     </main>
 
 </div>
@@ -763,8 +736,14 @@ button {
 let vehicle =
     localStorage.getItem("ticketVehicle") || "734";
 
+
+let route =
+    localStorage.getItem("ticketRoute") || "Трамвай: №3";
+
+
 const ticketSeries =
     "QR200938000636";
+
 
 const ticketNumber =
     "20260901173500141";
@@ -884,6 +863,20 @@ function updateVehicleDisplay() {
 
 
 /* =========================
+   ОБНОВЛЕНИЕ МАРШРУТА
+========================= */
+
+function updateRouteDisplay() {
+
+    document.getElementById(
+        "route"
+    ).textContent =
+        route;
+
+}
+
+
+/* =========================
    СОЗДАНИЕ QR
 ========================= */
 
@@ -909,7 +902,8 @@ function generateQR() {
         ticketNumber +
         ";DATE=" +
         formatQRDate(paymentDate) +
-        ";ROUTE=3" +
+        ";ROUTE=" +
+        route +
         ";AMOUNT=42" +
         ";VEHICLE=" +
         vehicle;
@@ -1010,6 +1004,59 @@ function updateTimer() {
         formatTimer(elapsed);
 
 }
+
+
+/* =========================
+   РЕДАКТИРОВАНИЕ МАРШРУТА
+========================= */
+
+document
+    .getElementById("route")
+    .addEventListener(
+        "click",
+        function () {
+
+            const newRoute =
+                prompt(
+                    "Введите маршрут:",
+                    route
+                );
+
+
+            if (newRoute === null) {
+                return;
+            }
+
+
+            const clean =
+                newRoute.trim();
+
+
+            if (!clean) {
+
+                alert(
+                    "Маршрут не может быть пустым."
+                );
+
+                return;
+            }
+
+
+            route = clean;
+
+
+            localStorage.setItem(
+                "ticketRoute",
+                route
+            );
+
+
+            updateRouteDisplay();
+
+            generateQR();
+
+        }
+    );
 
 
 /* =========================
@@ -1209,6 +1256,8 @@ document
 updateDateDisplay();
 
 updateVehicleDisplay();
+
+updateRouteDisplay();
 
 updateTimer();
 
