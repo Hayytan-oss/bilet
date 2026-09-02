@@ -3,9 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Уведомление об оплате</title>
 
 <style>
+
+/* =========================================================
+   CIRCE
+========================================================= */
+
+@font-face {
+    font-family: "Circe";
+    src:
+        url("./media/circe-bold-webfont-E5JJ35TE.woff2") format("woff2"),
+        url("./media/circe-bold-webfont-U3KED5TT.woff") format("woff");
+    font-weight: 700;
+    font-style: normal;
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
 * {
     box-sizing: border-box;
 }
@@ -16,102 +36,172 @@ body {
     padding: 0;
     width: 100%;
     min-height: 100%;
-    background: #f2f3f4;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #111;
 }
 
 body {
-    display: block;
+    background-color: #f2f3f4;
+    font-family: Circe, sans-serif;
+    color: #111;
 }
 
-/* =========================
+
+/* =========================================================
    TICKET
-========================= */
+========================================================= */
 
 .ticket {
     width: 430px;
     max-width: 100%;
     margin: 0;
-    background: #f2f3f4;
+    padding: 0;
+
+    background-color: #f2f3f4;
+
     border-radius: 0;
-    overflow: hidden;
     box-shadow: none;
+
+    overflow: hidden;
 }
 
-/* =========================
+
+/* =========================================================
    HEADER
-========================= */
+   Сделано по структуре из твоего исходника:
+   ::before — верхний тёмно-синий изгиб
+   ::after  — нижний голубой изгиб
+========================================================= */
 
 .header {
+    height: 120px;
+
+    background-color: rgb(32, 159, 255);
+
+    display: flex;
     position: relative;
-    height: 89px;
-    background: #209df7;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
     overflow: hidden;
 }
 
-.header-shape {
+
+/* Верхний тёмно-синий изгиб */
+
+.header::before {
+    content: "";
+
+    display: block;
+
     position: absolute;
+
     inset: 0;
-    width: 100%;
-    height: 100%;
+
+    z-index: 1;
+
+    background-image:
+        url("./media/header-top-part-SBMOWKGP.svg");
+
+    background-position: right top;
+    background-repeat: no-repeat;
 }
 
-.header-title {
+
+/* Нижний светло-голубой изгиб */
+
+.header::after {
+    content: "";
+
+    display: block;
+
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 15px;
+
+    inset: 0;
+
+    z-index: 2;
+
+    height: auto;
+
+    aspect-ratio: 32 / 4;
+
+    top: auto;
+
+    background:
+        url("./media/header-bottom-part-U3DIKSH2.svg")
+        center bottom / 100% auto no-repeat,
+        linear-gradient(
+            transparent 50%,
+            rgb(242, 243, 244) 50%
+        );
+}
+
+
+/* Заголовок */
+
+.header-title {
+    position: relative;
+
+    z-index: 3;
+
+    margin-top: 20px;
+
+    color: #fff;
+
+    font-size: 20px;
+    line-height: 1.2;
+
+    font-weight: 700;
 
     text-align: center;
 
-    color: #fff;
-    font-size: 20px;
-    font-weight: 700;
-
-    z-index: 2;
+    white-space: nowrap;
 }
 
-/* =========================
-   WAVE
-========================= */
 
-.wave {
-    height: 35px;
-    position: relative;
-    overflow: hidden;
-    background: #f2f3f4;
-}
-
-.wave-svg {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-}
-
-/* =========================
+/* =========================================================
    CONTENT
-========================= */
+========================================================= */
 
 .content {
     padding: 4px 35px 35px;
+
     text-align: center;
 }
 
+
+/* =========================================================
+   SUCCESS
+========================================================= */
+
 .success {
     margin: 0 0 10px;
-    font-size: 21px;
+
+    font-size: 20px;
+    line-height: 1.3;
+
     font-weight: 400;
+
+    color: #111;
 }
+
+
+/* =========================================================
+   ROUTE
+========================================================= */
 
 .route {
     margin-top: 4px;
 
     font-size: 20px;
     line-height: 1.2;
+
     font-weight: 700;
+
+    color: #111;
 
     cursor: pointer;
     user-select: none;
@@ -121,12 +211,20 @@ body {
     opacity: .65;
 }
 
+
+/* =========================================================
+   PRICE
+========================================================= */
+
 .price {
     margin-top: 7px;
 
     font-size: 48px;
     line-height: 1;
+
     font-weight: 700;
+
+    color: #111;
 }
 
 .price span {
@@ -134,11 +232,20 @@ body {
     font-weight: 400;
 }
 
+
+/* =========================================================
+   DATE
+========================================================= */
+
 .date {
     margin-top: 9px;
 
     font-size: 18px;
+    line-height: 1.2;
+
     font-weight: 400;
+
+    color: #111;
 
     cursor: pointer;
     user-select: none;
@@ -148,11 +255,20 @@ body {
     opacity: .65;
 }
 
+
+/* =========================================================
+   VEHICLE
+========================================================= */
+
 .ticket-code {
     margin-top: 7px;
 
     font-size: 18px;
+    line-height: 1.2;
+
     font-weight: 400;
+
+    color: #111;
 
     cursor: pointer;
     user-select: none;
@@ -162,20 +278,30 @@ body {
     opacity: .65;
 }
 
+
+/*
+   Номер Т/С специально обычного начертания
+*/
+
 .ticket-code strong {
     font-weight: 400 !important;
     color: #111 !important;
 }
 
-/* =========================
+
+/* =========================================================
    TIMER
-========================= */
+========================================================= */
 
 .timer-title {
     margin-top: 20px;
 
     font-size: 18px;
+    line-height: 1.2;
+
     font-weight: 400;
+
+    color: #111;
 }
 
 .timer {
@@ -183,14 +309,18 @@ body {
 
     font-size: 32px;
     line-height: 1;
+
     font-weight: 700;
+
+    color: #111;
 
     font-variant-numeric: tabular-nums;
 }
 
-/* =========================
+
+/* =========================================================
    QR
-========================= */
+========================================================= */
 
 .qr-wrapper {
     width: 360px;
@@ -201,11 +331,13 @@ body {
     margin: 20px auto 14px;
 
     background: #fff;
+
     border-radius: 0;
 
     overflow: hidden;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 }
@@ -222,40 +354,52 @@ body {
     object-fit: contain;
 }
 
-/* =========================
+
+/* =========================================================
    SERIES / NUMBER
-========================= */
+========================================================= */
 
 .info {
     font-size: 18px;
     line-height: 1.45;
+
     font-weight: 400;
+
+    color: #111;
 }
 
 .info span {
     font-weight: 700 !important;
+
     color: #111 !important;
+
     text-decoration: none !important;
+
     -webkit-text-fill-color: #111 !important;
 
     cursor: default !important;
 }
 
-/* =========================
+
+/* =========================================================
    INSTRUCTION
-========================= */
+========================================================= */
 
 .instruction {
     margin-top: 17px;
 
     font-size: 17px;
     line-height: 1.35;
+
     font-weight: 400;
+
+    color: #111;
 }
 
-/* =========================
+
+/* =========================================================
    BUTTON
-========================= */
+========================================================= */
 
 .download {
     width: 100%;
@@ -263,19 +407,26 @@ body {
 
     margin-top: 22px;
 
+    padding: 0;
+
     border: 0;
+
     border-radius: 28px;
 
-    background: linear-gradient(
-        135deg,
-        #58c8d1,
-        #4799ee
-    );
+    background:
+        linear-gradient(
+            135deg,
+            #58c8d1,
+            #4799ee
+        );
 
     color: #fff;
 
-    font-family: inherit;
+    font-family: Circe, sans-serif;
+
     font-size: 20px;
+    line-height: 1;
+
     font-weight: 700;
 
     cursor: pointer;
@@ -293,9 +444,10 @@ body {
     transform: scale(.98);
 }
 
-/* =========================
+
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
 @media (max-width: 480px) {
 
@@ -307,6 +459,7 @@ body {
     .qr-wrapper {
         width: 100%;
         height: auto;
+
         aspect-ratio: 1 / 1;
     }
 
@@ -319,34 +472,23 @@ body {
     .price span {
         font-size: 44px;
     }
+
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div class="ticket">
 
-    <!-- HEADER -->
-    <div class="header">
 
-        <svg
-            class="header-shape"
-            viewBox="0 0 430 89"
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path
-                d="
-                    M 132 0
-                    C 154 14, 181 24, 214 29
-                    C 272 37, 349 26, 430 22
-                    L 430 0
-                    Z
-                "
-                fill="#0065B0"
-            />
-        </svg>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="header">
 
         <div class="header-title">
             — Уведомление об оплате —
@@ -355,55 +497,22 @@ body {
     </div>
 
 
-    <!-- WAVE -->
-    <div class="wave">
+    <!-- =====================================================
+         CONTENT
+    ====================================================== -->
 
-        <svg
-            class="wave-svg"
-            viewBox="0 0 430 35"
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-
-            <path
-                d="
-                    M 0 6
-                    C 61 -2, 124 -7, 188 -5
-                    C 274 -1, 350 5, 430 0
-                    L 430 29
-                    C 352 23, 274 16, 188 16
-                    C 119 17, 59 24, 0 30
-                    Z
-                "
-                fill="#BDECEE"
-            />
-
-            <path
-                d="
-                    M 0 30
-                    C 59 24, 119 17, 188 16
-                    C 274 16, 352 23, 430 29
-                    L 430 35
-                    L 0 35
-                    Z
-                "
-                fill="#F2F3F4"
-            />
-
-        </svg>
-
-    </div>
-
-
-    <!-- CONTENT -->
     <div class="content">
 
+
+        <!-- УСПЕШНАЯ ОПЛАТА -->
+
         <p class="success">
-            Проезд оплачен
+            Ваш проезд успешно оплачен!
         </p>
 
 
-        <!-- ROUTE -->
+        <!-- МАРШРУТ -->
+
         <div
             class="route"
             id="route"
@@ -413,13 +522,15 @@ body {
         </div>
 
 
-        <!-- PRICE -->
+        <!-- СУММА -->
+
         <div class="price">
             42<span> ₽</span>
         </div>
 
 
-        <!-- DATE -->
+        <!-- ДАТА -->
+
         <div
             class="date"
             id="date"
@@ -429,7 +540,8 @@ body {
         </div>
 
 
-        <!-- VEHICLE -->
+        <!-- Т/С -->
+
         <div
             class="ticket-code"
             id="vehicleRow"
@@ -440,7 +552,8 @@ body {
         </div>
 
 
-        <!-- TIMER -->
+        <!-- ТАЙМЕР -->
+
         <div class="timer-title">
             Время с момента оплаты
         </div>
@@ -454,16 +567,20 @@ body {
 
 
         <!-- QR -->
+
         <div class="qr-wrapper">
+
             <img
                 id="qrImage"
                 src=""
                 alt="QR-код"
             >
+
         </div>
 
 
-        <!-- SERIES / NUMBER -->
+        <!-- СЕРИЯ / НОМЕР -->
+
         <div class="info">
 
             Серия:
@@ -477,13 +594,15 @@ body {
         </div>
 
 
-        <!-- INSTRUCTION -->
+        <!-- ИНСТРУКЦИЯ -->
+
         <div class="instruction">
             Предъявите QR-код контролёру при проверке проезда
         </div>
 
 
-        <!-- BUTTON -->
+        <!-- КНОПКА -->
+
         <button
             class="download"
             id="downloadButton"
@@ -491,6 +610,7 @@ body {
         >
             Скачать билет
         </button>
+
 
     </div>
 
@@ -500,16 +620,29 @@ body {
 <script>
 
 /* =========================================================
-   STORAGE
+   LOCAL STORAGE
 ========================================================= */
 
-const STORAGE_PAYMENT = "ticketPaymentDate";
-const STORAGE_ROUTE = "ticketRoute";
-const STORAGE_VEHICLE = "ticketVehicle";
-const STORAGE_SERIES = "ticketSeries";
-const STORAGE_NUMBER = "ticketNumber";
-const STORAGE_SERIES_SUFFIX = "ticketSeriesSuffix";
-const STORAGE_NUMBER_SUFFIX = "ticketNumberSuffix";
+const STORAGE_PAYMENT =
+    "ticketPaymentDate";
+
+const STORAGE_ROUTE =
+    "ticketRoute";
+
+const STORAGE_VEHICLE =
+    "ticketVehicle";
+
+const STORAGE_SERIES =
+    "ticketSeries";
+
+const STORAGE_NUMBER =
+    "ticketNumber";
+
+const STORAGE_SERIES_SUFFIX =
+    "ticketSeriesSuffix";
+
+const STORAGE_NUMBER_SUFFIX =
+    "ticketNumberSuffix";
 
 
 /* =========================================================
@@ -559,7 +692,10 @@ const DEFAULT_VEHICLE =
 let paymentDate;
 
 const savedPayment =
-    localStorage.getItem(STORAGE_PAYMENT);
+    localStorage.getItem(
+        STORAGE_PAYMENT
+    );
+
 
 if (
     savedPayment &&
@@ -567,7 +703,9 @@ if (
 ) {
 
     paymentDate =
-        new Date(Number(savedPayment));
+        new Date(
+            Number(savedPayment)
+        );
 
 } else {
 
@@ -579,7 +717,9 @@ if (
 
     localStorage.setItem(
         STORAGE_PAYMENT,
-        String(paymentDate.getTime())
+        String(
+            paymentDate.getTime()
+        )
     );
 }
 
@@ -589,7 +729,10 @@ if (
 ========================================================= */
 
 const savedRoute =
-    localStorage.getItem(STORAGE_ROUTE);
+    localStorage.getItem(
+        STORAGE_ROUTE
+    );
+
 
 if (savedRoute) {
 
@@ -613,7 +756,10 @@ if (savedRoute) {
 ========================================================= */
 
 const savedVehicle =
-    localStorage.getItem(STORAGE_VEHICLE);
+    localStorage.getItem(
+        STORAGE_VEHICLE
+    );
+
 
 if (savedVehicle) {
 
@@ -638,10 +784,15 @@ if (savedVehicle) {
 
 function pad(value) {
 
-    return String(value).padStart(2, "0");
+    return String(value)
+        .padStart(2, "0");
 
 }
 
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
 
 function formatDate(date) {
 
@@ -656,8 +807,13 @@ function formatDate(date) {
         ":" +
         pad(date.getMinutes())
     );
+
 }
 
+
+/* =========================================================
+   QR DATE
+========================================================= */
 
 function formatQRDate(date) {
 
@@ -670,28 +826,49 @@ function formatQRDate(date) {
         pad(date.getMinutes()) +
         pad(date.getSeconds())
     );
+
 }
 
 
 /* =========================================================
    SERIES
+=========================================================
+
+   Формат:
+
+   QR + YYMMDD + 6 цифр
+
+   Например:
+
+   02.09.2026
+
+   QR260902123456
+
 ========================================================= */
 
 function generateSeries(date) {
 
     const year =
-        String(date.getFullYear()).slice(-2);
+        String(
+            date.getFullYear()
+        ).slice(-2);
 
     const month =
-        pad(date.getMonth() + 1);
+        pad(
+            date.getMonth() + 1
+        );
 
     const day =
-        pad(date.getDate());
+        pad(
+            date.getDate()
+        );
+
 
     let suffix =
         localStorage.getItem(
             STORAGE_SERIES_SUFFIX
         );
+
 
     if (!suffix) {
 
@@ -709,6 +886,7 @@ function generateSeries(date) {
         );
     }
 
+
     return (
         "QR" +
         year +
@@ -721,6 +899,18 @@ function generateSeries(date) {
 
 /* =========================================================
    NUMBER
+=========================================================
+
+   Формат:
+
+   YYYYMMDDHHMMSS + 3 цифры
+
+   Например:
+
+   01.09.2026 17:35:00
+
+   20260901173500141
+
 ========================================================= */
 
 function generateNumber(date) {
@@ -729,24 +919,36 @@ function generateNumber(date) {
         date.getFullYear();
 
     const month =
-        pad(date.getMonth() + 1);
+        pad(
+            date.getMonth() + 1
+        );
 
     const day =
-        pad(date.getDate());
+        pad(
+            date.getDate()
+        );
 
     const hours =
-        pad(date.getHours());
+        pad(
+            date.getHours()
+        );
 
     const minutes =
-        pad(date.getMinutes());
+        pad(
+            date.getMinutes()
+        );
 
     const seconds =
-        pad(date.getSeconds());
+        pad(
+            date.getSeconds()
+        );
+
 
     let suffix =
         localStorage.getItem(
             STORAGE_NUMBER_SUFFIX
         );
+
 
     if (!suffix) {
 
@@ -763,6 +965,7 @@ function generateNumber(date) {
             suffix
         );
     }
+
 
     return (
         year +
@@ -783,16 +986,22 @@ function generateNumber(date) {
 function updateTicketIdentifiers() {
 
     const series =
-        generateSeries(paymentDate);
+        generateSeries(
+            paymentDate
+        );
 
     const number =
-        generateNumber(paymentDate);
+        generateNumber(
+            paymentDate
+        );
+
 
     seriesElement.textContent =
         series;
 
     numberElement.textContent =
         number;
+
 
     localStorage.setItem(
         STORAGE_SERIES,
@@ -811,10 +1020,15 @@ function updateTicketIdentifiers() {
 ========================================================= */
 
 const savedSeries =
-    localStorage.getItem(STORAGE_SERIES);
+    localStorage.getItem(
+        STORAGE_SERIES
+    );
 
 const savedNumber =
-    localStorage.getItem(STORAGE_NUMBER);
+    localStorage.getItem(
+        STORAGE_NUMBER
+    );
+
 
 if (
     savedSeries &&
@@ -842,25 +1056,39 @@ function updateTimer() {
     const now =
         new Date();
 
+
     const elapsed =
         now.getTime() -
         paymentDate.getTime();
+
 
     let elapsedMinutes =
         Math.floor(
             elapsed / 60000
         );
 
-    if (elapsedMinutes < 0) {
+
+    if (
+        elapsedMinutes < 0
+    ) {
+
         elapsedMinutes = 0;
+
     }
+
 
     let remainingSeconds =
         60 - now.getSeconds();
 
-    if (remainingSeconds === 60) {
+
+    if (
+        remainingSeconds === 60
+    ) {
+
         remainingSeconds = 60;
+
     }
+
 
     timerElement.textContent =
         pad(elapsedMinutes) +
@@ -870,11 +1098,18 @@ function updateTimer() {
 
 
 /* =========================================================
-   INITIAL
+   INITIAL DATE
 ========================================================= */
 
 dateElement.textContent =
-    formatDate(paymentDate);
+    formatDate(
+        paymentDate
+    );
+
+
+/* =========================================================
+   INITIAL TIMER
+========================================================= */
 
 updateTimer();
 
@@ -897,6 +1132,7 @@ function generateQR() {
     const number =
         numberElement.textContent;
 
+
     const qrData =
         [
             "PROTOTYPE_TICKET",
@@ -908,6 +1144,7 @@ function generateQR() {
             "VEHICLE=" + vehicle
         ].join(";");
 
+
     const qrUrl =
         "https://api.qrserver.com/v1/create-qr-code/" +
         "?size=360x360" +
@@ -915,15 +1152,21 @@ function generateQR() {
         "&data=" +
         encodeURIComponent(qrData);
 
+
     qrImage.src =
         qrUrl;
 }
+
+
+/* =========================================================
+   INITIAL QR
+========================================================= */
 
 generateQR();
 
 
 /* =========================================================
-   TIMER UPDATE
+   TIMER LOOP
 ========================================================= */
 
 setInterval(
@@ -946,25 +1189,33 @@ routeElement.addEventListener(
                 routeElement.textContent
             );
 
+
         if (
             newRoute === null ||
             newRoute.trim() === ""
         ) {
+
             return;
+
         }
+
 
         const value =
             newRoute.trim();
 
+
         routeElement.textContent =
             value;
+
 
         localStorage.setItem(
             STORAGE_ROUTE,
             value
         );
 
+
         generateQR();
+
     }
 );
 
@@ -985,25 +1236,33 @@ document
                     vehicleElement.textContent
                 );
 
+
             if (
                 newVehicle === null ||
                 newVehicle.trim() === ""
             ) {
+
                 return;
+
             }
+
 
             const value =
                 newVehicle.trim();
 
+
             vehicleElement.textContent =
                 value;
+
 
             localStorage.setItem(
                 STORAGE_VEHICLE,
                 value
             );
 
+
             generateQR();
+
         }
     );
 
@@ -1022,12 +1281,16 @@ dateElement.addEventListener(
                 formatDate(paymentDate)
             );
 
+
         if (
             newDate === null ||
             newDate.trim() === ""
         ) {
+
             return;
+
         }
+
 
         const match =
             newDate
@@ -1035,6 +1298,7 @@ dateElement.addEventListener(
                 .match(
                     /^(\d{2})\.(\d{2})\.(\d{4})\s+(\d{2}):(\d{2})$/
                 );
+
 
         if (!match) {
 
@@ -1044,6 +1308,7 @@ dateElement.addEventListener(
 
             return;
         }
+
 
         const day =
             Number(match[1]);
@@ -1060,6 +1325,7 @@ dateElement.addEventListener(
         const minutes =
             Number(match[5]);
 
+
         const newPaymentDate =
             new Date(
                 year,
@@ -1071,8 +1337,11 @@ dateElement.addEventListener(
                 0
             );
 
+
         if (
-            isNaN(newPaymentDate.getTime()) ||
+            isNaN(
+                newPaymentDate.getTime()
+            ) ||
             newPaymentDate.getFullYear() !== year ||
             newPaymentDate.getMonth() !== month - 1 ||
             newPaymentDate.getDate() !== day
@@ -1085,8 +1354,10 @@ dateElement.addEventListener(
             return;
         }
 
+
         paymentDate =
             newPaymentDate;
+
 
         localStorage.setItem(
             STORAGE_PAYMENT,
@@ -1095,14 +1366,25 @@ dateElement.addEventListener(
             )
         );
 
+
+        /*
+         * При изменении даты
+         * серия и номер пересчитываются.
+         */
+
         updateTicketIdentifiers();
 
+
         dateElement.textContent =
-            formatDate(paymentDate);
+            formatDate(
+                paymentDate
+            );
+
 
         updateTimer();
 
         generateQR();
+
     }
 );
 
@@ -1115,8 +1397,14 @@ downloadButton.addEventListener(
     "click",
     function () {
 
+
+        /*
+         * Новое время оплаты
+         */
+
         paymentDate =
             new Date();
+
 
         localStorage.setItem(
             STORAGE_PAYMENT,
@@ -1124,6 +1412,11 @@ downloadButton.addEventListener(
                 paymentDate.getTime()
             )
         );
+
+
+        /*
+         * Новый суффикс серии
+         */
 
         localStorage.setItem(
             STORAGE_SERIES_SUFFIX,
@@ -1135,6 +1428,11 @@ downloadButton.addEventListener(
             )
         );
 
+
+        /*
+         * Новый суффикс номера
+         */
+
         localStorage.setItem(
             STORAGE_NUMBER_SUFFIX,
             String(
@@ -1145,20 +1443,51 @@ downloadButton.addEventListener(
             )
         );
 
+
+        /*
+         * Обновляем дату
+         */
+
         dateElement.textContent =
-            formatDate(paymentDate);
+            formatDate(
+                paymentDate
+            );
+
+
+        /*
+         * Обновляем серию
+         * и номер
+         */
 
         updateTicketIdentifiers();
 
+
+        /*
+         * Обновляем таймер
+         */
+
         updateTimer();
 
+
+        /*
+         * Обновляем QR
+         */
+
         generateQR();
+
+
+        /*
+         * Вибрация
+         */
 
         if (
             navigator.vibrate
         ) {
+
             navigator.vibrate(20);
+
         }
+
     }
 );
 
